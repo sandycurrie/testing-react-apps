@@ -6,7 +6,28 @@ import {render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Login from '../../components/login'
 
-test('submitting the form calls onSubmit with username and password', () => {
+test('submitting the form calls onSubmit with username and password', async () => {
+    let submittedData;
+    const handleSubmit = (data) => (submittedData = data)
+
+    render(<Login onSubmit={handleSubmit} />);
+
+    const username = 'chucknorris';
+    const password = 'ineednopassword';
+
+
+    // use this to find the screen queries: https://chrome.google.com/webstore/detail/testing-playground/hejbmebodbijjdhflfknehhcgaklhano/related?hl=en-GB
+
+    await userEvent.type(screen.getByLabelText(/username/i), username);
+    await userEvent.type(screen.getByLabelText(/password/i), password);
+
+    await userEvent.click(screen.getByRole('button', { name: /submit/i }));
+
+    expect(submittedData).toEqual({
+        username: username,
+        password: password,
+    });
+
   // 🐨 create a variable called "submittedData" and a handleSubmit function that
   // accepts the data and assigns submittedData to the data that was submitted
   // 💰 if you need a hand, here's what the handleSubmit function should do:
