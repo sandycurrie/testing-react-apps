@@ -7,13 +7,20 @@ import userEvent from '@testing-library/user-event'
 import Login from '../../components/login'
 import faker from 'faker'
 
+function buildLoginForm() {
+    return {
+        username: faker.internet.userName(),
+        password: faker.internet.password()
+    }
+}
+
 test('submitting the form calls onSubmit with username and password', async () => {
+    const { username, password } = buildLoginForm();
+
     const handleSubmit = jest.fn();
 
     render(<Login onSubmit={handleSubmit} />);
 
-    const username = faker.internet.userName();
-    const password = faker.internet.password();
 
     // use this to find the screen queries: https://chrome.google.com/webstore/detail/testing-playground/hejbmebodbijjdhflfknehhcgaklhano/related?hl=en-GB
     await userEvent.type(screen.getByLabelText(/username/i), username);
