@@ -74,5 +74,5 @@ test(`logging in fails without a username`, async () => {
 
   await waitForElementToBeRemoved(screen.getByLabelText(/loading/i));
 
-  expect(screen.getByText(/username required/i)).toBeInTheDocument();
+  expect(screen.getByRole('alert')).toHaveTextContent(/username required/i);
 })
