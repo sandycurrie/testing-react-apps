@@ -8,6 +8,7 @@ import {build, fake} from '@jackfranklin/test-data-bot'
 import Login from '../../components/login-submission'
 import {rest} from 'msw';
 import {setupServer}  from 'msw/node';
+import {handlers} from "../../test/server-handlers";
 
 const buildLoginForm = build({
   fields: {
@@ -17,22 +18,23 @@ const buildLoginForm = build({
 })
 
 // 🐨 get the server setup with an async function to handle the login POST request:
-const server = setupServer(
-  rest.post(
-    'https://auth-provider.example.com/api/login',
-    async (req, res, ctx) => {
-      if (!req.body.username) {
-        return res(ctx.status(400),ctx.json({message: 'username required'}));
-      }
-
-      if (!req.body.password) {
-        return res(ctx.status(400),ctx.json({message: 'password required'}));
-      }
-
-      return res(ctx.json({username: req.body.username }))
-    },
-  )
-)
+// const server = setupServer(
+//   rest.post(
+//     'https://auth-provider.example.com/api/login',
+//     async (req, res, ctx) => {
+//       if (!req.body.username) {
+//         return res(ctx.status(400),ctx.json({message: 'username required'}));
+//       }
+//
+//       if (!req.body.password) {
+//         return res(ctx.status(400),ctx.json({message: 'password required'}));
+//       }
+//
+//       return res(ctx.json({username: req.body.username }))
+//     },
+//   )
+// )
+const server = setupServer(...handlers);
 
 beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
