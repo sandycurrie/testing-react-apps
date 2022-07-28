@@ -8,12 +8,16 @@ import EasyButton from '../../components/easy-button'
 
 
 describe(EasyButton, () => {
-    test('renders with the light styles for the light theme', () => {
+    const renderWithTheme = (ui, {theme = 'light', ...options} = {}) => {
         const Wrapper = ({children}) => {
-            return <ThemeProvider initialTheme="light">{children}</ThemeProvider>
+            return <ThemeProvider initialTheme={theme}>{children}</ThemeProvider>
         }
 
-        render(<EasyButton>Easy</EasyButton>, { wrapper: Wrapper })
+        return render(ui, { wrapper: Wrapper, ...options })
+    }
+
+    test('renders with the light styles for the light theme', () => {
+        renderWithTheme(<EasyButton>Easy</EasyButton>);
         const button = screen.getByRole('button', {name: /easy/i})
         expect(button).toHaveStyle(`
             background-color: white;
@@ -22,11 +26,7 @@ describe(EasyButton, () => {
     })
 
     test('renders with the dark styles for the dark theme', () => {
-        const Wrapper = ({children}) => {
-            return <ThemeProvider initialTheme="dark">{children}</ThemeProvider>
-        }
-
-        render(<EasyButton>Easy</EasyButton>, { wrapper: Wrapper })
+        renderWithTheme(<EasyButton>Easy</EasyButton>, {theme: 'dark'});
         const button = screen.getByRole('button', {name: /easy/i})
         expect(button).toHaveStyle(`
             background-color: black;
