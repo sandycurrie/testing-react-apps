@@ -47,4 +47,25 @@ test('exposes the count and increment/decrement functions - fake component', asy
     expect(result.count).toBe(0);
 })
 
+function setup({initialProps} = {}) {
+    const result = {}
+    function TestComponent() {
+        // have to use an attribute or Object.assign to keep the ref to the original object on rerender.
+        result.current = useCounter(initialProps);
+        return null
+    }
+
+    render(<TestComponent />)
+    return result;
+}
+
+test('exposes the count and increment/decrement functions - fake component - Part 2', async () => {
+    const result = setup({initialProps: { initialCount: 3, step: 2} })
+    expect(result.current.count).toBe(3);
+    await act(() => result.current.increment());
+    expect(result.current.count).toBe(5);
+    await act(() => result.current.decrement());
+    expect(result.current.count).toBe(3);
+})
+
 /* eslint no-unused-vars:0 */
