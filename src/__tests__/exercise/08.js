@@ -2,7 +2,7 @@
 // http://localhost:3000/counter-hook
 
 import * as React from 'react'
-import {act, render, screen} from '@testing-library/react'
+import {act, render, renderHook, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import useCounter from '../../components/use-counter'
 
@@ -66,6 +66,16 @@ test('exposes the count and increment/decrement functions - fake component - Par
     expect(result.current.count).toBe(5);
     await act(() => result.current.decrement());
     expect(result.current.count).toBe(3);
+})
+
+test('exposes the count and increment/decrement functions - renderHook', async () => {
+    const {result, rerender} = renderHook(useCounter, {initialProps: { initialCount: 3, step: 2} })
+    expect(result.current.count).toBe(3);
+    await act(() => result.current.increment());
+    expect(result.current.count).toBe(5);
+    rerender({step: 1})
+    await act(() => result.current.decrement());
+    expect(result.current.count).toBe(4);
 })
 
 /* eslint no-unused-vars:0 */
