@@ -32,4 +32,19 @@ test('exposes the count and increment/decrement functions', async () => {
     expect(label).toHaveTextContent('Current count: 0');
 })
 
+test('exposes the count and increment/decrement functions - fake component', async () => {
+    let result
+    function TestComponent(props) {
+        result = useCounter(props)
+        return null
+    }
+    render(<TestComponent />)
+
+    expect(result.count).toBe(0);
+    await act(() => result.increment());
+    expect(result.count).toBe(1);
+    await act(() => result.decrement());
+    expect(result.count).toBe(0);
+})
+
 /* eslint no-unused-vars:0 */
